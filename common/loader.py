@@ -7,7 +7,8 @@ class Loader:
         self.file_extensions = self.check_extension(file_extensions)
 
         if not os.path.isdir(os.path.abspath(path)):
-            raise NotADirectoryError(f"Could not find directory: {os.path.abspath(path)}")
+            raise NotADirectoryError(
+                f"Could not find directory: {os.path.abspath(path)}")
 
         self.path = path
 
