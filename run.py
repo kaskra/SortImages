@@ -3,7 +3,7 @@ import os
 import time
 import shutil
 
-from loader import Loader
+from common.loader import Loader
 
 
 def get_dates(images):
@@ -50,7 +50,7 @@ def image_output(image_at_day, output_path):
 
 
 if __name__ == "__main__":
-    input_path = "images"
+    input_path = "input"
     output_path = "output"
     file_extensions = ["jpg"]
 
