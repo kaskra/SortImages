@@ -3,19 +3,15 @@ import os
 import time
 import shutil
 
-def import_imgs(path):
-    images = []
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            if os.path.splitext(file)[1].lower() == ".jpg":
-                images.append(os.path.abspath("{}/{}".format(root, file)))
-    return images 
+from loader import Loader
+
 
 def get_dates(images):
     dates = {}
     for image in images:
         img = Image.open(image)
-        exif = { ExifTags.TAGS[k]: v for k, v in img._getexif().items() if k in ExifTags.TAGS }
+        exif = {ExifTags.TAGS[k]: v for k,
+                v in img._getexif().items() if k in ExifTags.TAGS}
 
         date = exif['DateTime'][5:]
         date_obj = time.strptime(date, "%m:%d %H:%M:%S")
@@ -26,38 +22,42 @@ def get_dates(images):
             dates[key].append((image, date_obj))
     return dates
 
+
 def image_output(image_at_day, output_path):
     if not os.path.isdir(output_path):
         os.makedirs(output_path)
 
-    months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
+    months = ["Januar", "Februar",
+              "März", "April", "Mai",
+              "Juni", "Juli", "August",
+              "September", "Oktober",
+              "November", "Dezember"]
 
     for key in image_at_day:
-        images  = image_at_day[key]
+        images = image_at_day[key]
         month, _ = key.split(":")
-        path = os.path.abspath(output_path + "/" + month + "_" + months[int(month)-1])
+        path = os.path.abspath(output_path + "/" +
+                               month + "_" + months[int(month)-1])
         if not os.path.isdir(path):
             os.makedirs(path)
         for image, date in images:
             date = f"{date.tm_mon}{date.tm_mday}_{date.tm_hour}{date.tm_min}{date.tm_sec}"
             image_dst = path + "\\" + date
             if os.path.isfile(image_dst):
-                image_dst += "_2"    
+                image_dst += "_2"
             image_dst += ".jpg"
             shutil.copy(image, image_dst)
 
 
 if __name__ == "__main__":
-    path = "images"
+    input_path = "images"
+    output_path = "output"
+    file_extensions = ["jpg"]
+
     # import all images found at path and below
-    print(f"Import images from {os.path.abspath(path)}")
-    images = import_imgs(path)
-    dates = get_dates(images)
+    loader = Loader(path=input_path,
+                    file_extensions=file_extensions)
+    files = loader.load()
 
- 
-    image_output(dates, "output")
-
-
-
-
-
+    dates = get_dates(files)
+    image_output(dates, output_path)
