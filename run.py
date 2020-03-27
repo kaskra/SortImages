@@ -3,6 +3,8 @@ import os
 import time
 import shutil
 
+import argparse
+
 from common.loader import Loader
 
 
@@ -50,9 +52,18 @@ def image_output(image_at_day, output_path):
 
 
 if __name__ == "__main__":
-    input_path = "input"
-    output_path = "output"
-    file_extensions = ["jpg"]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--input", type=str, default=".",
+                        required=True, help="an input path to a directory")
+    parser.add_argument("-o", "--output", type=str, default=".",
+                        required=True, help="an output path to a directory")
+    parser.add_argument("-e", "--exts", nargs="+", type=str,
+                        required=True, help="a list of extensions to work on")
+    args = parser.parse_args()
+
+    input_path = args.input
+    output_path = args.output
+    file_extensions = args.exts
 
     # import all images found at path and below
     loader = Loader(path=input_path,
