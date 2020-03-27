@@ -3,7 +3,7 @@ from common.loader import Loader
 
 # TOOD add data to "data/"
 
-def test_load_one_extension():
+def test_one_extension():
     loader = Loader("tests/data", file_extensions=[".jpg"])
     files = loader.load()
     assert len(files) == 0
@@ -44,15 +44,20 @@ def test_one_extension_faulty_extension():
     files = loader.load()
     assert len(files) == 0
 
+def test_one_extension_faulty_path():
+    with pytest.raises(NotADirectoryError):
+        loader = Loader("tests/data2", file_extensions=[".jpg"])
+
+def test_multiple_extensions_faulty_path():
+    with pytest.raises(NotADirectoryError):
+        loader = Loader("tests/data2", file_extensions=[".jpg"])
+
+
 
 # TODO add more cases in extensions
-def test_load_multiple_extensions():
+def test_multiple_extensions():
     loader = Loader("tests/data", file_extensions=[
                     ".jpg", ".png", ".mp4", ".svg", ".txt"])
     files = loader.load()
     assert len(files) == 0
 
-
-def test_one_extension_faulty_path():
-    with pytest.raises(NotADirectoryError):
-        loader = Loader("tests/data2", file_extensions=[".jpg"])
