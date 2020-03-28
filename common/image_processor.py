@@ -77,8 +77,10 @@ class ImageProcessor(Processor):
             for image, date in images:
                 date = f"{date.tm_mon}{date.tm_mday}_{date.tm_hour}{date.tm_min}{date.tm_sec}"
                 image_dst = path + "\\" + date
-                if os.path.isfile(image_dst):
+                # TODO extension should not be constant here
+                if os.path.isfile(image_dst+".jpg"):
                     image_dst += "_2"
+                # TODO extension should not be constant here
                 image_dst += ".jpg"
                 shutil.copy(image, image_dst)
                 counter += 1
