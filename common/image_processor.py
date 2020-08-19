@@ -37,6 +37,9 @@ class ImageProcessor(Processor):
         processed_data = {}
         for image in tqdm.tqdm(self.data):
             img = Image.open(image)
+            if img._getexif() is None:
+                print(f"Skipped image {image}")
+                continue
             exif = {ExifTags.TAGS[k]: v for k,
                     v in img._getexif().items() if k in ExifTags.TAGS}
 
