@@ -6,14 +6,18 @@ class Loader:
     def __init__(self, path=".", file_extensions=[".jpg"]):
         self.file_extensions = self.check_extension(file_extensions)
 
-        if not os.path.isdir(os.path.abspath(path)):
-            raise NotADirectoryError(
-                f"Could not find directory: {os.path.abspath(path)}")
+        if path is str:
+            self.path = [path]
+        else: 
+            self.path = path
 
-        self.path = path
-
-        print(
-            f"Importing {self.file_extensions} files from {os.path.abspath(path)} ...")
+        for p in self.path:
+            if not os.path.isdir(os.path.abspath(p)):
+                raise NotADirectoryError(
+                    f"Could not find directory: {os.path.abspath(p)}")
+           
+            print(
+                f"Importing {self.file_extensions} files from {os.path.abspath(p)} ...")
 
     def check_extension(self, file_extensions):
         """Strips extension string, adds a dot if not already there 
@@ -34,10 +38,11 @@ class Loader:
         on the given path or below. 
         """
         found_files = []
-        for root, dirs, files in os.walk(self.path):
-            for file in files:
-                if os.path.splitext(file)[1].lower() in self.file_extensions:
-                    found_files.append(os.path.abspath(
-                        "{}/{}".format(root, file)))
+        for p in self.path:
+            for root, dirs, files in os.walk(p):
+                for file in files:
+                    if os.path.splitext(file)[1].lower() in self.file_extensions:
+                        found_files.append(os.path.abspath(
+                            "{}/{}".format(root, file)))
         print(f"Loaded {len(found_files)} files.")
         return found_files
