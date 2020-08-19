@@ -11,7 +11,7 @@ class ImageProcessor(Processor):
 
     def __init__(self, data):
         super().__init__(data)
-        self.EXTENSIONS = [".jpg", ".png", ".jpeg"]
+        self.EXTENSIONS = [".jpg", ".png", ".jpeg", ".JPG", ".PNG", ".JPEG"]
 
         self.processed_data = None
 
